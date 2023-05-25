@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -35,7 +36,7 @@ public class Register extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Registration");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNewLabel.setBounds(175, 24, 98, 19);
+		lblNewLabel.setBounds(153, 21, 98, 19);
 		contentPane.add(lblNewLabel);
 		
 		JLabel Name1 = new JLabel("Name:");
@@ -93,7 +94,12 @@ public class Register extends JFrame {
 		    public void actionPerformed(ActionEvent e) {
 		        if (!TFNAME.getText().equals("") && !TFUSER.getText().equals("") && !TFPASS.getText().equals("") && !TFEMAIL.getText().equals("") && !TFPHONE.getText().equals("")) {
 		            // Register the account and save details to a text file
-		            registerAccount();
+		        	String name = TFNAME.getText();
+		    	    String username = TFUSER.getText();
+		    	    String password = TFPASS.getText();
+		    	    String email = TFEMAIL.getText();
+		    	    String phone = TFPHONE.getText();
+		        	registerAccount(name, username, password, email, phone);
 		        } else {
 		            JOptionPane.showMessageDialog(null, "Fill out all the fields and try again");
 		        }
@@ -105,7 +111,7 @@ public class Register extends JFrame {
 
 			
 	
-		btnNewButton.setBounds(175, 358, 89, 23);
+		btnNewButton.setBounds(60, 359, 89, 23);
 		contentPane.add(btnNewButton);
 		
 		JButton btnBack = new JButton("Back");
@@ -116,8 +122,21 @@ public class Register extends JFrame {
 				dispose();
 			}
 		});
-		btnBack.setBounds(175, 392, 89, 23);
+		btnBack.setBounds(258, 358, 89, 23);
 		contentPane.add(btnBack);
+		
+		JButton btnBack_1 = new JButton("Clear");
+		btnBack_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TFNAME.setText(" ");
+				TFUSER.setText(" ");
+				TFPASS.setText(" ");
+				TFEMAIL.setText(" ");
+				TFPHONE.setText(" ");
+			}
+		});
+		btnBack_1.setBounds(159, 359, 89, 23);
+		contentPane.add(btnBack_1);
 	}
 	/**
 	 * Launch the application.
@@ -136,19 +155,16 @@ public class Register extends JFrame {
 		});
 	}
 
-	private void registerAccount() {
-	    String name = TFNAME.getText();
-	    String username = TFUSER.getText();
-	    String password = TFPASS.getText();
-	    String email = TFEMAIL.getText();
-	    String phone = TFPHONE.getText();
+	private void registerAccount(String name, String username, String password, String email, String phone) {
+	 
 
-	    String userDetails = String.format("Name: %s%nUsername: %s%nPassword: %s%nEmail: %s%nPhone: %s%n", name, username, password, email, phone);
+	    
 
-	    try (FileWriter writer = new FileWriter("registered_accounts.txt", true)) {
-	        writer.write(userDetails);
-	        writer.write("------------------------------\n");
-	        writer.flush();
+	    try {
+	        BufferedWriter writer = new BufferedWriter(new FileWriter("D:\\New folder (2)\\Presentation\\src\\registered_accounts.txt", true));
+	        writer.write( name  + ","  +  username + "," +  password + ","  + email + ","  + phone);
+	        writer.newLine();
+	        writer.close();
 
 	        JOptionPane.showMessageDialog(null, "Successfully Registered");
 	    } catch (IOException ex) {
@@ -156,7 +172,4 @@ public class Register extends JFrame {
 	        ex.printStackTrace();
 	    }
 	}
-
-	
-	
 }
