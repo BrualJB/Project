@@ -1,28 +1,124 @@
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
-import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 
-public class Register  extends Login{
 
-	private JFrame Register1;
-	private JTextField Name1;
-	private JTextField Username1;
-	private JTextField Password1;
-	private JTextField Email1;
-	private JTextField Phone1;
-	private JTextField Address1;
+public class Register extends JFrame {
+	
 
+	private JPanel contentPane;
+	private JTextField TFNAME;
+	private JTextField TFUSER;
+	private JTextField TFPASS;
+	private JTextField TFEMAIL;
+	private JTextField TFPHONE;
+	public Register() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 443, 500);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Registration");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel.setBounds(175, 24, 98, 19);
+		contentPane.add(lblNewLabel);
+		
+		JLabel Name1 = new JLabel("Name:");
+		Name1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		Name1.setBounds(60, 78, 46, 14);
+		contentPane.add(Name1);
+		
+		TFNAME = new JTextField();
+		TFNAME.setBounds(60, 103, 299, 20);
+		contentPane.add(TFNAME);
+		TFNAME.setColumns(10);
+		
+		JLabel Username1 = new JLabel("Username:");
+		Username1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		Username1.setBounds(60, 134, 61, 14);
+		contentPane.add(Username1);
+		
+		TFUSER = new JTextField();
+		TFUSER.setColumns(10);
+		TFUSER.setBounds(60, 159, 299, 20);
+		contentPane.add(TFUSER);
+		
+		JLabel Password1 = new JLabel("Password:");
+		Password1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		Password1.setBounds(60, 190, 61, 14);
+		contentPane.add(Password1);
+		
+		TFPASS = new JTextField();
+		TFPASS.setColumns(10);
+		TFPASS.setBounds(60, 215, 299, 20);
+		contentPane.add(TFPASS);
+		
+		JLabel Email1 = new JLabel("Email:");
+		Email1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		Email1.setBounds(60, 246, 61, 14);
+		contentPane.add(Email1);
+		
+		TFEMAIL = new JTextField();
+		TFEMAIL.setColumns(10);
+		TFEMAIL.setBounds(60, 271, 299, 20);
+		contentPane.add(TFEMAIL);
+		
+		JLabel Phone1 = new JLabel("Phone:");
+		Phone1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		Phone1.setBounds(60, 302, 46, 14);
+		contentPane.add(Phone1);
+		
+		TFPHONE = new JTextField();
+		TFPHONE.setColumns(10);
+		TFPHONE.setBounds(60, 327, 299, 20);
+		contentPane.add(TFPHONE);
+		
+		JButton btnNewButton = new JButton("Submit");
+		btnNewButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        if (!TFNAME.getText().equals("") && !TFUSER.getText().equals("") && !TFPASS.getText().equals("") && !TFEMAIL.getText().equals("") && !TFPHONE.getText().equals("")) {
+		            // Register the account and save details to a text file
+		            registerAccount();
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Fill out all the fields and try again");
+		        }
+		    }
+		});
+
+
+				
+
+			
+	
+		btnNewButton.setBounds(175, 358, 89, 23);
+		contentPane.add(btnNewButton);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Login L = new Login();
+				L.setVisible(true);
+				dispose();
+			}
+		});
+		btnBack.setBounds(175, 392, 89, 23);
+		contentPane.add(btnBack);
+	}
 	/**
 	 * Launch the application.
 	 */
@@ -30,142 +126,37 @@ public class Register  extends Login{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Register window = new Register();
-					window.Register1.setVisible(true);
+					Register frame = new Register();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
+			
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public Register() {
-		initialize();
+	private void registerAccount() {
+	    String name = TFNAME.getText();
+	    String username = TFUSER.getText();
+	    String password = TFPASS.getText();
+	    String email = TFEMAIL.getText();
+	    String phone = TFPHONE.getText();
+
+	    String userDetails = String.format("Name: %s%nUsername: %s%nPassword: %s%nEmail: %s%nPhone: %s%n", name, username, password, email, phone);
+
+	    try (FileWriter writer = new FileWriter("registered_accounts.txt", true)) {
+	        writer.write(userDetails);
+	        writer.write("------------------------------\n");
+	        writer.flush();
+
+	        JOptionPane.showMessageDialog(null, "Successfully Registered");
+	    } catch (IOException ex) {
+	        JOptionPane.showMessageDialog(null, "Error occurred while saving the account details");
+	        ex.printStackTrace();
+	    }
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		Register1 = new JFrame();
-		Register1.setBounds(100, 100, 500, 550);
-		Register1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Register1.getContentPane().setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Applicant Registration");
-		lblNewLabel.setBounds(118, 11, 286, 29);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		Register1.getContentPane().add(lblNewLabel);
-		
-		JButton btnNewButton = new JButton("Submit");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!Name1.getText().equals("") && !Username1.getText().equals("") && !Password1.getText().equals("")  && !Email1.getText().equals("") && !Phone1.getText().equals("")) {
-				    JOptionPane.showMessageDialog(null, "Successfully Registered");
-				} else {
-				    JOptionPane.showMessageDialog(null, "Fill out all the fields and try again");
-				
-
-	}
-		
+	
 	
 }
-	
-		
-		});
-		btnNewButton.setBounds(62, 387, 89, 23);
-		Register1.getContentPane().add(btnNewButton);
-		
-		JLabel Name = new JLabel("Name");
-		Name.setBounds(62, 51, 70, 14);
-		Register1.getContentPane().add(Name);
-		
-		Name1 = new JTextField();
-		Name1.setBounds(62, 76, 311, 20);
-		Register1.getContentPane().add(Name1);
-		Name1.setColumns(10);
-		
-		JLabel Username = new JLabel("Username");
-		Username.setBounds(62, 107, 70, 14);
-		Register1.getContentPane().add(Username);
-		
-		Username1 = new JTextField();
-		Username1.setColumns(10);
-		Username1.setBounds(62, 132, 311, 20);
-		Register1.getContentPane().add(Username1);
-		
-		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LoginFrame FE = new LoginFrame();
-				FE.setVisible(true);
-				dispose();
-				
-			}
-		});
-		btnBack.setBounds(284, 387, 89, 23);
-		Register1.getContentPane().add(btnBack);
-		
-		JLabel Password = new JLabel("Password");
-		Password.setBounds(62, 163, 70, 14);
-		Register1.getContentPane().add(Password);
-		
-		Password1 = new JTextField();
-		Password1.setColumns(10);
-		Password1.setBounds(62, 188, 311, 20);
-		Register1.getContentPane().add(Password1);
-		
-		JLabel Email = new JLabel("Email");
-		Email.setBounds(62, 219, 70, 14);
-		Register1.getContentPane().add(Email);
-		
-		Email1 = new JTextField();
-		Email1.setColumns(10);
-		Email1.setBounds(62, 244, 311, 20);
-		Register1.getContentPane().add(Email1);
-		
-		JLabel Phone = new JLabel("Phone");
-		Phone.setBounds(62, 275, 89, 14);
-		Register1.getContentPane().add(Phone);
-		
-		Phone1 = new JTextField();
-		Phone1.setColumns(10);
-		Phone1.setBounds(62, 300, 311, 20);
-		Register1.getContentPane().add(Phone1);
-		
-		JLabel Address = new JLabel("Address");
-		Address.setBounds(62, 331, 89, 14);
-		Register1.getContentPane().add(Address);
-		
-		Address1 = new JTextField();
-		Address1.setColumns(10);
-		Address1.setBounds(62, 356, 311, 20);
-		Register1.getContentPane().add(Address1);
-		
-		JButton btnReset = new JButton("Reset");
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Name1.setText("");
-				Username1.setText("");
-				Password1.setText("");
-				Email1.setText("");
-				Phone1.setText("");
-				Address1.setText("");
-				
-			}
-		});
-		btnReset.setBounds(174, 387, 89, 23);
-		Register1.getContentPane().add(btnReset);
-	}
-
-	protected void getText() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	}
-
